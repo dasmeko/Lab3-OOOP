@@ -1,3 +1,4 @@
+import math
 from Constants import ROWS, TILE_SIZE
 
 class Tile:
@@ -33,3 +34,60 @@ class Board:
         
         return moved
         
+    def win_check(self):
+        result = 0
+        done = False
+        
+        for i in range(ROWS):
+            pl_ch = self.tiles[i * ROWS].value
+            if pl_ch == 0:
+                continue
+            win = True
+            for j in range(ROWS):
+                if self.tiles[i * ROWS + j].value != pl_ch:
+                    win = False
+                    break
+            if win:
+                return True, pl_ch
+        
+        for i in range(ROWS):
+            pl_ch = self.tiles[i].value
+            if pl_ch == 0:
+                continue
+            win = True
+            for j in range(ROWS):
+                if self.tiles[i + j * ROWS].value != pl_ch:
+                    win = False
+                    break
+            if win:
+                return True, pl_ch
+        
+        win = True
+        for i in range(ROWS):
+            pl_ch = self.tiles[0].value
+            if pl_ch == 0:
+                win = False
+                break
+            if self.tiles[i + i * ROWS].value != pl_ch:
+                win = False
+                break
+        if win:
+            return True, pl_ch
+        
+        win = True
+        for i in range(ROWS):
+            pl_ch = self.tiles[ROWS - 1].value
+            if pl_ch == 0:
+                win = False
+                break
+            if self.tiles[(ROWS - 1) * (i + 1)].value != pl_ch:
+                win = False
+                break
+        if win:
+            return True, pl_ch
+        
+        if self.fullness == ROWS**2:
+            return True, 3
+        
+        return done, result
+
